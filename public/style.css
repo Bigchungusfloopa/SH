@@ -1,41 +1,287 @@
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
 }
 
-body{
-    font-family:Arial, Helvetica, sans-serif;
-    background:#f4f4f4;
-    display:flex;
-    justify-content:center;
-    padding:50px;
+:root {
+    color-scheme: light;
+    --text: #101114;
+    --muted: #6c7280;
+    --line: rgba(255, 255, 255, 0.62);
+    --glass: rgba(255, 255, 255, 0.58);
+    --glass-strong: rgba(255, 255, 255, 0.74);
+    --blue: #007aff;
+    --red: #ff3b30;
+    --green: #34c759;
+    --shadow: 0 24px 80px rgba(31, 35, 45, 0.18);
 }
 
-.container{
-    width:500px;
-    background:white;
-    padding:20px;
-    border-radius:10px;
+body {
+    min-height: 100vh;
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", Arial, sans-serif;
+    background:
+        radial-gradient(circle at 16% 18%, rgba(0, 122, 255, 0.24), transparent 30%),
+        radial-gradient(circle at 84% 12%, rgba(255, 45, 85, 0.18), transparent 28%),
+        linear-gradient(135deg, #f7f9fc 0%, #e9edf6 45%, #f9fbff 100%);
+    color: var(--text);
 }
 
-h1{
-    margin-bottom:20px;
-    text-align:center;
+.app-shell {
+    min-height: 100vh;
+    display: grid;
+    place-items: center;
+    padding: 28px;
 }
 
-.input-section{
-    display:flex;
-    gap:10px;
+.container {
+    width: min(100%, 680px);
+    padding: 28px;
+    border: 1px solid var(--line);
+    border-radius: 26px;
+    background: var(--glass);
+    box-shadow: var(--shadow);
+    backdrop-filter: blur(28px) saturate(180%);
+    -webkit-backdrop-filter: blur(28px) saturate(180%);
 }
-input{
-    flex:1;
-    padding:10px;
+
+.title-row {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 18px;
+    margin-bottom: 24px;
 }
-button{
-    padding:10px 20px;
-    cursor:pointer;
+
+.eyebrow {
+    color: var(--muted);
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0;
+    text-transform: uppercase;
 }
-ul{
-    margin-top:20px;
+
+h1 {
+    margin-top: 4px;
+    font-size: clamp(34px, 8vw, 52px);
+    font-weight: 800;
+    letter-spacing: 0;
+}
+
+.input-section {
+    display: grid;
+    grid-template-columns: minmax(180px, 1fr) 150px 120px auto;
+    gap: 10px;
+    padding: 8px;
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.45);
+}
+
+input {
+    min-width: 0;
+    flex: 1;
+    border: 0;
+    border-radius: 13px;
+    background: rgba(255, 255, 255, 0.72);
+    color: var(--text);
+    font: inherit;
+    font-size: 16px;
+    outline: none;
+    padding: 13px 14px;
+}
+
+input:focus {
+    box-shadow: 0 0 0 4px rgba(0, 122, 255, 0.14);
+}
+
+button {
+    border: 0;
+    border-radius: 13px;
+    cursor: pointer;
+    font: inherit;
+    font-size: 15px;
+    font-weight: 700;
+    min-height: 44px;
+    padding: 0 18px;
+    transition: transform 160ms ease, background 160ms ease, box-shadow 160ms ease;
+}
+
+button:hover {
+    transform: translateY(-1px);
+}
+
+button:active {
+    transform: translateY(0);
+}
+
+#addButton {
+    background: var(--blue);
+    color: #fff;
+    box-shadow: 0 10px 22px rgba(0, 122, 255, 0.26);
+}
+
+.undo-button {
+    background: rgba(255, 255, 255, 0.78);
+    color: var(--text);
+    min-width: 82px;
+}
+
+.undo-button:disabled {
+    color: rgba(16, 17, 20, 0.34);
+    cursor: not-allowed;
+    transform: none;
+}
+
+.status {
+    min-height: 18px;
+    margin: 12px 4px 0;
+    color: var(--red);
+    font-size: 13px;
+    font-weight: 650;
+}
+
+.summary {
+    margin: 8px 4px 12px;
+    color: var(--muted);
+    font-size: 14px;
+    font-weight: 600;
+}
+
+ul {
+    display: grid;
+    gap: 10px;
+    list-style: none;
+}
+
+.todo-item {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 12px;
+    min-height: 62px;
+    padding: 10px 10px 10px 14px;
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    background: var(--glass-strong);
+    backdrop-filter: blur(20px) saturate(160%);
+    -webkit-backdrop-filter: blur(20px) saturate(160%);
+}
+
+.todo-item.completed .todo-text {
+    color: var(--muted);
+    text-decoration: line-through;
+}
+
+.toggle {
+    width: 24px;
+    height: 24px;
+    min-height: 24px;
+    padding: 0;
+    border: 2px solid rgba(16, 17, 20, 0.16);
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.7);
+}
+
+.todo-item.completed .toggle {
+    border-color: var(--green);
+    background: var(--green);
+}
+
+.todo-content {
+    display: grid;
+    gap: 5px;
+    min-width: 0;
+}
+
+.todo-text,
+.todo-due,
+.edit-input {
+    overflow-wrap: anywhere;
+}
+
+.todo-text {
+    font-size: 16px;
+    font-weight: 650;
+}
+
+.todo-due {
+    color: var(--muted);
+    font-size: 13px;
+    font-weight: 650;
+}
+
+.edit-input,
+.edit-date,
+.edit-time {
+    width: 100%;
+}
+
+.edit-date,
+.edit-time {
+    padding: 10px 12px;
+    font-size: 14px;
+}
+
+.actions {
+    display: flex;
+    gap: 8px;
+}
+
+.action-button {
+    min-width: 68px;
+    background: rgba(255, 255, 255, 0.78);
+    color: var(--text);
+}
+
+.delete-button {
+    color: var(--red);
+}
+
+.save-button {
+    background: var(--text);
+    color: #fff;
+}
+
+.empty-state {
+    padding: 28px 14px;
+    color: var(--muted);
+    font-weight: 650;
+    text-align: center;
+}
+
+@media (max-width: 560px) {
+    .app-shell {
+        padding: 16px;
+    }
+
+    .container {
+        padding: 20px;
+        border-radius: 22px;
+    }
+
+    .title-row {
+        align-items: stretch;
+    }
+
+    .undo-button {
+        min-width: 76px;
+    }
+
+    .input-section,
+    .todo-item {
+        grid-template-columns: 1fr;
+    }
+
+    .todo-item {
+        grid-template-columns: auto minmax(0, 1fr);
+    }
+
+    .actions {
+        grid-column: 1 / -1;
+    }
+
+    .actions button {
+        flex: 1;
+    }
 }

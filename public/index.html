@@ -2,34 +2,57 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Todo App</title>
 
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <div class="container">
+    <main class="app-shell">
+        <section class="container" aria-labelledby="appTitle">
 
-        <h1>Todo App</h1>
-
-        <div class="input-section">
-
-            <input
-                type="text"
-                id="todoInput"
-                placeholder="Enter a Task!"
-            >
-
-            <button id="addButton">
-                Add
+        <div class="title-row">
+            <div>
+                <p class="eyebrow">Today</p>
+                <h1 id="appTitle">Todo App</h1>
+            </div>
+            <button class="undo-button" id="undoButton" type="button" disabled>
+                Undo
             </button>
         </div>
 
-        <ul id="todoList">
+        <form class="input-section" id="todoForm">
+            <input
+                type="text"
+                id="todoInput"
+                placeholder="Add a task"
+                autocomplete="off"
+            >
 
-        </ul>
-    </div>
+            <input
+                type="date"
+                id="dateInput"
+                aria-label="Task date"
+            >
+
+            <input
+                type="time"
+                id="timeInput"
+                aria-label="Task time"
+            >
+
+            <button id="addButton" type="submit">
+                Add
+            </button>
+        </form>
+
+        <div class="status" id="status" role="status"></div>
+        <div class="summary" id="summary">No tasks yet</div>
+
+        <ul id="todoList" aria-label="Todo list"></ul>
+        </section>
+    </main>
     <script src="script.js"></script>
 </body>    
 </html>
