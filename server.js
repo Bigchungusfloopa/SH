@@ -7,21 +7,29 @@ const app = express();
 
 const PORT = process.env.PORT || 3000;
 const HOST = process.env.HOST || "127.0.0.1";
+const DATABASE_URL = process.env.DATABASE_URL || process.env.DB_URL;
 const LOCAL_DB_USER = process.env.PGUSER || process.env.USER || process.env.LOGNAME;
 const LOCAL_DB_NAME = process.env.PGDATABASE || "todo_app";
 const MAINTENANCE_DB_NAME = process.env.PGMAINTENANCEDATABASE || "postgres";
 
 function createPool(database = LOCAL_DB_NAME) {
+    if (DATABASE_URL) {
+        return new Pool({ connectionString: DATABASE_URL });
+    }
+
+    const config = {
+        user: LOCAL_DB_USER,
+        database,
+        host: process.env.PGHOST || "localhost",
+        port: Number(process.env.PGPORT) || 5432
+    };
+
+    if (process.env.PGPASSWORD) {
+        config.password = process.env.PGPASSWORD;
+    }
+
     return new Pool(
-        process.env.DATABASE_URL
-            ? { connectionString: process.env.DATABASE_URL }
-            : {
-                user: LOCAL_DB_USER,
-                database,
-                host: process.env.PGHOST || "localhost",
-                port: Number(process.env.PGPORT) || 5432,
-                password: process.env.PGPASSWORD
-            }
+        config
     );
 }
 
@@ -49,7 +57,7 @@ async function initDb() {
     try {
         await createTodosTable();
     } catch (error) {
-        if (error.code !== "3D000" || process.env.DATABASE_URL) {
+        if (error.code !== "3D000" || DATABASE_URL) {
             throw error;
         }
 
@@ -229,9 +237,9 @@ initDb()
     .catch((error) => {
         console.error("Could not connect to PostgreSQL.");
         console.error(
-            process.env.DATABASE_URL
-                ? "Check DATABASE_URL and make sure Postgres is running."
-                : `Tried local database "${LOCAL_DB_NAME}" as user "${LOCAL_DB_USER}". Set DATABASE_URL, PGDATABASE, or PGUSER if your local Postgres uses different names.`
+            DATABASE_URL
+                ? "Check DATABASE_URL/DB_URL and make sure Postgres is running."
+                : `Tried local database "${LOCAL_DB_NAME}" as user "${LOCAL_DB_USER}". Set DATABASE_URL, DB_URL, PGDATABASE, PGUSER, or PGPASSWORD if your Postgres uses different credentials.`
         );
         console.error(error);
         process.exit(1);
